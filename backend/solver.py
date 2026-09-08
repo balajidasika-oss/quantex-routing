@@ -4,7 +4,7 @@ from qiskit_optimization.applications import Tsp
 from qiskit_optimization.algorithms import MinimumEigenOptimizer
 from qiskit_algorithms import QAOA
 from qiskit_algorithms.optimizers import COBYLA
-from qiskit.primitives import Sampler
+from qiskit.primitives import StatevectorSampler as Sampler
 import time
 import math
 
