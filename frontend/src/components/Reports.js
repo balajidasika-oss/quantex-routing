@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 export default function Reports({
   selectedPlanId = null,
   planCode = "PLAN-ACTIVE",
-  apiUrl = "http://localhost:8000/api",
+  apiUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api"),
 }) {
   const [blocks, setBlocks] = useState([]);
   const [verificationResult, setVerificationResult] = useState(null);

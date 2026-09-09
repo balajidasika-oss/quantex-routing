@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import FleetMap from "../components/FleetMap";
 import QuantumCircuitViewer from "../components/QuantumCircuitViewer";
 
-export default function Optimize({ apiUrl = "http://localhost:8000/api", onRouteDispatched = () => {} }) {
+export default function Optimize({ apiUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api"), onRouteDispatched = () => {} }) {
   // Default delivery stop locations around San Francisco
   const [locations, setLocations] = useState([
     { name: "Central Metro Depot", lat: 37.7749, lng: -122.4194, demand_kg: 0.0 },

@@ -12,7 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 import FleetMap from "./FleetMap";
 
-export default function DriverDashboard({ apiUrl = "http://localhost:8000/api" }) {
+export default function DriverDashboard({ apiUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api") }) {
   const [assignedRoute, setAssignedRoute] = useState(null);
   const [performance, setPerformance] = useState(null);
   const [rerouteAlert, setRerouteAlert] = useState({

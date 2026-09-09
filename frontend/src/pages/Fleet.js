@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import FleetMap from "../components/FleetMap";
 import GeofenceAlerts from "../components/GeofenceAlerts";
 
-export default function Fleet({ apiUrl = "http://localhost:8000/api" }) {
+export default function Fleet({ apiUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api") }) {
   const [vehicles, setVehicles] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [forecast, setForecast] = useState(null);

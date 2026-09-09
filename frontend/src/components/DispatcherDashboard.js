@@ -15,7 +15,7 @@ import {
 } from "@heroicons/react/24/outline";
 import FleetMap from "./FleetMap";
 
-export default function DispatcherDashboard({ apiUrl = "http://localhost:8000/api", onNavigate = () => {} }) {
+export default function DispatcherDashboard({ apiUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api"), onNavigate = () => {} }) {
   const [activeTab, setActiveTab] = useState("routing"); // "overview", "routing", "incidents", "quantum"
   const [fleetData, setFleetData] = useState({ vehicles: [], summary: {} });
   const [alertsData, setAlertsData] = useState({ unacknowledged_alerts: 0, alerts: [] });

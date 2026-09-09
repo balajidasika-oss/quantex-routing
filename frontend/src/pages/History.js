@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Reports from "../components/Reports";
 
-export default function History({ apiUrl = "http://localhost:8000/api" }) {
+export default function History({ apiUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api") }) {
   const [plans, setPlans] = useState([]);
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [selectedPlanCode, setSelectedPlanCode] = useState("");

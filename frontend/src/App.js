@@ -23,14 +23,14 @@ export default function App() {
   const [wsConnected, setWsConnected] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
-  const API_URL = "http://localhost:8000/api";
-  const WS_URL = "ws://localhost:8000/ws/telemetry";
+  const API_URL = (process.env.REACT_APP_API_URL || "http://localhost:8000/api");
+  const WS_URL = (process.env.REACT_APP_WS_URL || "ws://localhost:8000/ws/telemetry");
 
   // Check Backend Health
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const res = await fetch("http://localhost:8000/health");
+        const res = await fetch(((process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace("/api", "/health") : null) || "http://localhost:8000/health"));
         setBackendHealthy(res.ok);
       } catch {
         setBackendHealthy(false);

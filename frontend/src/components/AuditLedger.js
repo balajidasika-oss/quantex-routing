@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function AuditLedger({ apiUrl = "http://localhost:8000/api" }) {
+export default function AuditLedger({ apiUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api") }) {
   const [ledger, setLedger] = useState([]);
   const [verification, setVerification] = useState(null);
   const [loading, setLoading] = useState(false);

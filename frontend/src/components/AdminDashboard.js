@@ -12,7 +12,7 @@ import {
   KeyIcon,
 } from "@heroicons/react/24/outline";
 
-export default function AdminDashboard({ apiUrl = "http://localhost:8000/api", onNavigate = () => {} }) {
+export default function AdminDashboard({ apiUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api"), onNavigate = () => {} }) {
   const [users, setUsers] = useState([]);
   const [solverSettings, setSolverSettings] = useState({
     default_solver: "quantum",
