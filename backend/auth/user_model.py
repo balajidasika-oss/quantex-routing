@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class UserRole(str, Enum):
@@ -12,7 +12,7 @@ class UserRole(str, Enum):
 
 class UserBase(BaseModel):
     username: str = Field(..., min_length=3, max_length=50)
-    email: EmailStr
+    email: str = Field(..., max_length=120)
     role: UserRole = UserRole.DISPATCHER
 
 
