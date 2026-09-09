@@ -3,12 +3,10 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ],
-  "build": {
-    "env": {
-      "REACT_APP_API_URL": "https://quantex-routing.onrender.com/api",
-      "REACT_APP_WS_URL": "wss://quantex-routing.onrender.com/ws/telemetry",
-      "GENERATE_SOURCEMAP": "false",
-      "CI": "false"
-    }
+  "env": {
+    "REACT_APP_API_URL": "https://quantex-routing.onrender.com/api",
+    "REACT_APP_WS_URL": "wss://quantex-routing.onrender.com/ws/telemetry",
+    "GENERATE_SOURCEMAP": "false",
+    "CI": "false"
   }
 }

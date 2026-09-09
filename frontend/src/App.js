@@ -24,14 +24,13 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState(null);
 
   const API_URL = (process.env.REACT_APP_API_URL || "http://localhost:8000/api");
-  const WS_URL = (process.env.REACT_APP_WS_URL || "ws://localhost:8000/ws/telemetry");
-  const HEALTH_URL = API_URL.replace(/\/api\/?$/, "/health");
 
   // Check Backend Health
   useEffect(() => {
+    const healthUrl = (process.env.REACT_APP_API_URL || "http://localhost:8000/api").replace(/\/api\/?$/, "/health");
     const checkHealth = async () => {
       try {
-        const res = await fetch(HEALTH_URL);
+        const res = await fetch(healthUrl);
         setBackendHealthy(res.ok);
       } catch {
         setBackendHealthy(false);
@@ -40,13 +39,15 @@ export default function App() {
     checkHealth();
     const interval = setInterval(checkHealth, 6000);
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Connect WebSocket for Live Fleet Telemetry
   useEffect(() => {
+    const wsUrl = process.env.REACT_APP_WS_URL || "ws://localhost:8000/ws/telemetry";
     let ws = null;
     try {
-      ws = new WebSocket(WS_URL);
+      ws = new WebSocket(wsUrl);
       ws.onopen = () => {
         setWsConnected(true);
       };
@@ -69,6 +70,7 @@ export default function App() {
     return () => {
       if (ws) ws.close();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLoginSuccess = (authData) => {
