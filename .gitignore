@@ -1,7 +1,10 @@
 # Node
 node_modules/
 build/
+# Env secrets – only ignore .env and .env.local (never .env.production)
 .env
+.env.local
+*.env.local
 .DS_Store
 
 # Python

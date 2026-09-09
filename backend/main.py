@@ -130,10 +130,18 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS – read allowed origins from env-var (comma-separated); fall back to localhost for local dev
+# CORS – list all origins explicitly; browsers block wildcard + credentials together
+# Reads CORS_ORIGINS env-var (comma-separated) so Render dashboard can override without code change
 _raw_cors = os.getenv(
     "CORS_ORIGINS",
-    "http://localhost:3000,http://127.0.0.1:3000,https://quantex-routing2.vercel.app,https://quantex-routing1.vercel.app",
+    (
+        "http://localhost:3000,"
+        "http://127.0.0.1:3000,"
+        "http://localhost:8000,"
+        "https://quantex-routing2.vercel.app,"
+        "https://quantex-routing1.vercel.app,"
+        "https://quantex-routing.vercel.app"
+    ),
 )
 _cors_origins = [o.strip() for o in _raw_cors.split(",") if o.strip()]
 
@@ -141,8 +149,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 
@@ -175,6 +184,12 @@ app.include_router(driver_router, prefix=settings.API_PREFIX)
 app.include_router(traffic_router, prefix=settings.API_PREFIX)
 
 
+@app.get("/")
+def root():
+    """Root endpoint – confirms API is alive."""
+    return {"service": settings.PROJECT_NAME, "status": "ONLINE", "docs": "/docs"}
+
+
 @app.get("/health")
 def health_check():
     """System health check endpoint."""
@@ -183,6 +198,7 @@ def health_check():
         "service": settings.PROJECT_NAME,
         "version": settings.VERSION,
         "timestamp": time.time(),
+        "cors_origins": _cors_origins,
     }
 
 
