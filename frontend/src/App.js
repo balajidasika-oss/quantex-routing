@@ -25,12 +25,13 @@ export default function App() {
 
   const API_URL = (process.env.REACT_APP_API_URL || "http://localhost:8000/api");
   const WS_URL = (process.env.REACT_APP_WS_URL || "ws://localhost:8000/ws/telemetry");
+  const HEALTH_URL = API_URL.replace(/\/api\/?$/, "/health");
 
   // Check Backend Health
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const res = await fetch(((process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace("/api", "/health") : null) || "http://localhost:8000/health"));
+        const res = await fetch(HEALTH_URL);
         setBackendHealthy(res.ok);
       } catch {
         setBackendHealthy(false);
@@ -134,7 +135,7 @@ export default function App() {
           <div className="hidden md:flex items-center space-x-2 bg-slate-100 dark:bg-slate-900/80 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-800">
             <span className={`w-2 h-2 rounded-full ${backendHealthy ? "bg-emerald-500 shadow-sm shadow-emerald-400" : "bg-rose-500"}`} />
             <span className="text-[11px] text-slate-700 dark:text-slate-300 font-mono">
-              {backendHealthy ? "API: 8000" : "API Offline"}
+              {backendHealthy ? "API: Online" : "API Offline"}
             </span>
           </div>
 
