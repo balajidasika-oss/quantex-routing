@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import Overview from "./pages/Overview";
 import Optimize from "./pages/Optimize";
 import Fleet from "./pages/Fleet";
@@ -9,8 +9,8 @@ import AuditLedger from "./components/AuditLedger";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ThemeToggle from "./components/ThemeToggle";
-
 import AnimatedBackground from "./components/AnimatedBackground";
+import EliteDispatchSystem from "./components/EliteDispatchSystem";
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState("dashboard");
@@ -90,7 +90,7 @@ export default function App() {
         {/* Brand */}
         <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setCurrentTab("dashboard")}>
           <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-purple-600 flex items-center justify-center font-black text-black text-base shadow-lg shadow-cyan-500/30">
-            Ψ
+            Î¨
           </div>
           <div>
             <div className="flex items-center space-x-1.5">
@@ -110,11 +110,11 @@ export default function App() {
         {/* Navigation Tabs */}
         <nav className="flex items-center space-x-1 sm:space-x-1.5 text-xs font-semibold bg-slate-100 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
           {[
-            { id: "dashboard", label: `${user.role[0]}${user.role.slice(1).toLowerCase()} Console`, icon: "🎮" },
-            { id: "overview", label: "Executive KPI", icon: "📊" },
-            { id: "optimize", label: "Quantum Studio", icon: "⚛️" },
-            { id: "fleet", label: "Fleet Hub", icon: "🚐" },
-            { id: "history", label: "Audit Ledger", icon: "🔗" },
+            { id: "dashboard", label: `${user.role[0]}${user.role.slice(1).toLowerCase()} Console`, icon: "ðŸŽ®" },
+            { id: "overview", label: "Executive KPI", icon: "ðŸ“Š" },
+            { id: "optimize", label: "Quantum Studio", icon: "âš›ï¸" },
+            { id: "fleet", label: "Fleet Hub", icon: "ðŸš" },
+            { id: "history", label: "Audit Ledger", icon: "ðŸ”—" },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -149,7 +149,7 @@ export default function App() {
             </span>
           </div>
 
-          {/* Theme Toggle (🌙 Dark / ☀️ Light) */}
+          {/* Theme Toggle (ðŸŒ™ Dark / â˜€ï¸ Light) */}
           <ThemeToggle />
 
           {/* Role Switcher Pill */}
@@ -189,7 +189,7 @@ export default function App() {
       {/* Floating Geofence Alert Toast */}
       {toastMessage && (
         <div className="fixed bottom-5 right-5 z-50 p-4 rounded-2xl bg-rose-950/95 border border-rose-500 text-white text-xs font-bold shadow-2xl flex items-center space-x-3 animate-bounce">
-          <span className="text-xl">⚠️</span>
+          <span className="text-xl">âš ï¸</span>
           <span>{toastMessage}</span>
         </div>
       )}
@@ -212,6 +212,8 @@ export default function App() {
           <Optimize apiUrl={API_URL} onRouteDispatched={() => setCurrentTab("fleet")} />
         )}
 
+        {currentTab === "nexus" && <EliteDispatchSystem />}
+
         {currentTab === "fleet" && (
           <Fleet apiUrl={API_URL} />
         )}
@@ -229,7 +231,7 @@ export default function App() {
               onClick={() => setShowAuthModal(false)}
               className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center text-sm font-bold z-10"
             >
-              ✕
+              âœ•
             </button>
             {authView === "login" ? (
               <Login onLogin={handleLoginSuccess} onSwitchToRegister={() => setAuthView("register")} />
@@ -247,3 +249,5 @@ export default function App() {
     </div>
   );
 }
+
+

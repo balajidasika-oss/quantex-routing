@@ -1,4 +1,4 @@
-import asyncio
+﻿import asyncio
 import os
 import time
 from contextlib import asynccontextmanager
@@ -17,6 +17,7 @@ from backend.routes.admin_routes import router as admin_router
 from backend.routes.dispatcher_routes import router as dispatcher_router
 from backend.routes.driver_routes import router as driver_router
 from backend.routes.traffic_routes import router as traffic_router
+from backend.routes.manual_dispatch_routes import router as manual_dispatch_router
 from backend.services.telemetry_pubsub import telemetry_broadcaster
 from backend.models import Vehicle
 
@@ -130,7 +131,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS – list all origins explicitly; browsers block wildcard + credentials together
+# CORS â€“ list all origins explicitly; browsers block wildcard + credentials together
 # Reads CORS_ORIGINS env-var (comma-separated) so Render dashboard can override without code change
 _raw_cors = os.getenv(
     "CORS_ORIGINS",
@@ -182,11 +183,12 @@ app.include_router(admin_router, prefix=settings.API_PREFIX)
 app.include_router(dispatcher_router, prefix=settings.API_PREFIX)
 app.include_router(driver_router, prefix=settings.API_PREFIX)
 app.include_router(traffic_router, prefix=settings.API_PREFIX)
+app.include_router(manual_dispatch_router, prefix=settings.API_PREFIX)
 
 
 @app.get("/")
 def root():
-    """Root endpoint – confirms API is alive."""
+    """Root endpoint â€“ confirms API is alive."""
     return {"service": settings.PROJECT_NAME, "status": "ONLINE", "docs": "/docs"}
 
 
@@ -227,3 +229,4 @@ async def websocket_telemetry_stream(websocket: WebSocket):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
+

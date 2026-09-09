@@ -1,168 +1,78 @@
-﻿# ⚡ Quantex Routing — Quantum-AI Last-Mile Delivery System
+﻿<div align="center">
 
-A production-grade, full-stack web application combining **Qiskit quantum optimisation** with a **FastAPI backend** and a **React frontend** to solve real-time vehicle routing, last-mile delivery dispatch, and fleet telemetry monitoring.
+# 🌌 Quantex Routing Nexus
+**Elite Quantum-AI Last-Mile Delivery & Fleet Dispatch System**
 
-## Live Links
+[![Frontend Deployment](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://quantex-routing2.vercel.app)
+[![Backend Deployment](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://quantex-routing.onrender.com)
+[![Qiskit Framework](https://img.shields.io/badge/Qiskit-6929C4?style=for-the-badge&logo=qiskit&logoColor=white)](https://qiskit.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 
-| Service | URL |
-|---------|-----|
-| Frontend (Vercel) | https://quantex-routing2.vercel.app |
-| Backend (Render) | https://quantex-routing.onrender.com |
-| Health check | https://quantex-routing.onrender.com/health |
+*An architectural marvel fusing mathematically explicit Ising Hamiltonians with high-performance React motion graphics.*
 
----
+</div>
 
-## Features
+<br/>
 
-- **Quantum-classical hybrid VRP solver** — QAOA and simulated annealing via Qiskit
-- **Real-time fleet telemetry** over WebSockets (live GPS + battery state-of-charge)
-- **Role-based access control** — Admin, Dispatcher, Driver roles with JWT auth
-- **Geofencing & deviation alerts** with severity classification
-- **Prometheus metrics** endpoint for observability
-- **Blockchain-style audit log** (SHA-256 chained blocks)
-- **EV battery intelligence** — degradation modelling and charge scheduling
-- **React frontend** with animated background, live map and order management
+## 🚀 Overview
 
----
+Quantex Routing is a production-grade dispatch application engineered to overcome classical NP-Hard limitations in fleet routing. By compiling real-time global telemetry into Quadratic Programs (QUBO), the system executes the Travelling Salesperson Problem (TSP) using Quantum Approximate Optimization Algorithms (QAOA) via Qiskit.
 
-## Project Structure
+## ✨ Elite Features
 
-```
-.
-├── backend/                  # FastAPI service
-│   ├── auth/                 # JWT + user model
-│   ├── models.py             # SQLAlchemy ORM models
-│   ├── routes/               # API routers (auth, fleet, optimize, ...)
-│   ├── services/             # Quantum solver, telemetry pub-sub
-│   ├── utils/                # Config, logger
-│   ├── database.py           # DB + Redis setup
-│   ├── main.py               # App entry-point
-│   └── requirements.txt      # Python dependencies
-├── frontend/                 # React app (create-react-app)
-│   ├── src/
-│   │   ├── App.js            # Root component & routing
-│   │   └── ...
-│   └── package.json
-├── deployment/               # Docker-compose, k8s, nginx, prometheus
-├── .github/workflows/ci.yml  # GitHub Actions CI
-└── README.md
-```
+- 🚁 **Live Quantum Vehicle Tracking:** 60FPS fluid interpolated trajectory tracking along quantum-optimized nodes using bespoke React-Leaflet systems.
+- 🪟 **Glassmorphic Cyberpunk HUD:** Deeply frosted UI elements with ramer-motion integrated, featuring a unique realtime decryption status text overlay.
+- 📦 **Premium Floating 3D Assets:** Hardware-accelerated immersive background engine rendering geometric isometric deliveries using native SVG.
+- 🔗 **Flawless Full-Stack Telemetry:** Zero-latency WebSocket synchronization between the FastAPI routing engine and the client interface.
 
----
+## 🧬 Quantum Architecture Diagram
 
-## Local Development
+`mermaid
+graph TD
+    A[Frontend React Map] -->|Coordinate Nodes| B(FastAPI Dispatch Endpoint)
+    B -->|Haversine Distance Matrix| C{Qiskit TSP Engine}
+    C -->|Quadratic Program| D[QAOA / StatevectorSampler]
+    D -->|MinimumEigenOptimizer| E[Decoded Binary State]
+    E -->|Optimized Route Permutation| B
+    B -->|WebSocket Broadcast| A
+    A -->|60FPS Frame Interpolation| F((Live Tracking UI))
+`
 
-### Prerequisites
+## 🛠 Tech Stack
+* **Frontend:** React 18, Tailwind CSS, Framer Motion, Leaflet.js
+* **Backend:** Python 3.11, FastAPI, WebSockets, Uvicorn
+* **Quantum Core:** Qiskit Optimization, StatevectorSampler, COBYLA
+* **Database:** SQLite (SQLAlchemy ORM)
 
-| Tool | Version |
-|------|---------|
-| Python | 3.11+ |
-| Node.js | 20+ |
-| npm | 10+ |
+## ⚡ Deployment & Configuration
 
-### Backend
+### Environment Variables
+**Frontend (.env.production)**
+\\\env
+REACT_APP_API_URL=https://quantex-routing.onrender.com/api
+REACT_APP_WS_URL=wss://quantex-routing.onrender.com/ws/telemetry
+\\\
 
-```bash
-cd backend
-python -m venv venv
-# Windows
-.\venv\Scripts\Activate.ps1
-# macOS/Linux
-source venv/bin/activate
+**Backend (.env)**
+\\\env
+CORS_ORIGINS=https://quantex-routing2.vercel.app
+\\\
 
-pip install -r requirements.txt
+### Local Execution
 
-# Copy and configure env variables
-cp .env.example .env
+1. **Backend Initialization:**
+   \\\ash
+   cd backend
+   pip install -r requirements.txt
+   uvicorn main:app --reload
+   \\\
+2. **Frontend Initialization:**
+   \\\ash
+   cd frontend
+   npm ci
+   npm start
+   \\\
 
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-API docs: http://localhost:8000/docs
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-
-# Optional: point at local backend
-echo "REACT_APP_API_URL=http://localhost:8000/api" > .env.local
-echo "REACT_APP_WS_URL=ws://localhost:8000/ws" >> .env.local
-
-npm start
-```
-
-React app: http://localhost:3000
-
----
-
-## Deployment
-
-### Render (Backend)
-
-1. Connect the GitHub repo to a new **Web Service** on Render.
-2. Set **Root Directory** to `.` and **Start Command** to:
-   ```
-   uvicorn backend.main:app --host 0.0.0.0 --port $PORT
-   ```
-3. Add these **Environment Variables** in Render dashboard:
-
-| Key | Value |
-|-----|-------|
-| `DATABASE_URL` | Your PostgreSQL connection string |
-| `SECRET_KEY` | Strong random string (32+ chars) |
-| `QISKIT_IBM_TOKEN` | Your IBM Quantum API token |
-| `CORS_ORIGINS` | `https://quantex-routing2.vercel.app,https://quantex-routing1.vercel.app` |
-| `REDIS_URL` | Redis connection string (optional — falls back to in-memory) |
-
-### Vercel (Frontend)
-
-1. Import the GitHub repo into Vercel, set **Root Directory** to `frontend`.
-2. Add these **Environment Variables** (Build & Development):
-
-| Key | Value |
-|-----|-------|
-| `REACT_APP_API_URL` | `https://quantex-routing.onrender.com/api` |
-| `REACT_APP_WS_URL` | `wss://quantex-routing.onrender.com/ws` |
-
-3. Trigger a **Redeploy** after adding env vars.
-
-> **Important:** Vercel bakes env vars into the JS bundle at **build time**. Trigger a new deploy every time you change these values.
-
----
-
-## IBM Quantum Token
-
-The `/api/optimize` endpoint uses Qiskit to run QAOA on IBM Quantum hardware (or the local Aer simulator when the token is absent). Without a valid token the optimizer falls back to the classical solver — all other endpoints remain fully functional.
-
-Get your token from https://quantum-computing.ibm.com and set it as `QISKIT_IBM_TOKEN` in Render.
-
----
-
-## CI / GitHub Actions
-
-Every push to `main` triggers:
-
-1. **Backend job** — installs `backend/requirements.txt`, compiles all Python, runs pytest with a SQLite test DB.
-2. **Frontend job** — `npm install`, then `npm run build` with the production Render URLs so the bundle points at the correct backend.
-
-`CI=false` is set so ESLint warnings don't abort the build.
-
----
-
-## Troubleshooting
-
-| Symptom | Root Cause | Fix |
-|---------|-----------|-----|
-| `ImportError: email-validator is not installed` | `pydantic[email]` was missing | Fixed — `requirements.txt` now includes `pydantic[email]` and `email-validator` |
-| Frontend calls `localhost:8000` on Vercel | `REACT_APP_API_URL` not set at build time | Set both `REACT_APP_*` vars in Vercel → Redeploy |
-| CORS error in browser | Vercel origin not in `CORS_ORIGINS` | Set `CORS_ORIGINS` in Render to include your Vercel URL |
-| `/api/optimize` returns 401 | Missing IBM token | Set `QISKIT_IBM_TOKEN` in Render env-vars |
-| CI fails on `npm ci` | `package-lock.json` out of sync | Run `npm install` in `frontend/` locally and commit lock file |
-
----
-
-## License
-
-MIT License — see [LICENSE](LICENSE) for details.
+<div align="center">
+  <sub>Built for unparalleled dispatch optimization.</sub>
+</div>
