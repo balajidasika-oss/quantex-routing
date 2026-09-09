@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 
-// Fix for default marker icons in React-Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -10,33 +9,44 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-const vehicleColors = ['#ef4444', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899']; // Red, Blue, Amber, Purple, Pink
-const optColors = ['#10b981', '#059669', '#047857', '#34d399', '#059669']; // Greens for optimized
+const vehicleColors = ['#ef4444', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'];
+const optColors = ['#10b981', '#059669', '#047857', '#34d399', '#059669'];
 
-// Component to recenter map when nodes change
 const MapUpdater = ({ nodes }) => {
   const map = useMap();
   useEffect(() => {
-    if (nodes && nodes.length > 0) {
+    if (nodes && nodes.length > 0 && !map.isTouched) {
       const bounds = L.latLngBounds(nodes.map(n => [n.lat, n.lng]));
-      map.fitBounds(bounds, { padding: [50, 50] });
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+      map.isTouched = true;
     }
   }, [nodes, map]);
   return null;
 };
 
-const MapComponent = ({ nodes, routes, isOptimized }) => {
-  // Center of SF as default
+const ClickHandler = ({ onAddNode }) => {
+  useMapEvents({
+    click(e) {
+      onAddNode({
+        id: `manual_${Date.now()}`,
+        lat: e.latlng.lat,
+        lng: e.latlng.lng,
+        label: `Manual Drop-${Math.floor(Math.random() * 1000)}`
+      });
+    },
+  });
+  return null;
+};
+
+const MapComponent = ({ nodes, routes, isOptimized, onAddNode }) => {
   const defaultCenter = [37.7749, -122.4194];
 
-  // Helper to draw polylines for a set of routes
   const renderRoutes = (routeDict, useOptimizedColor = false) => {
     if (!routeDict) return null;
     
     return Object.entries(routeDict).map(([vehicleId, routeNodes], index) => {
       if (routeNodes.length < 2) return null;
       
-      // Close the loop (TSP returns to start)
       const pathCoordinates = routeNodes.map(n => [n.lat, n.lng]);
       if (pathCoordinates.length > 0) {
         pathCoordinates.push(pathCoordinates[0]);
@@ -50,9 +60,11 @@ const MapComponent = ({ nodes, routes, isOptimized }) => {
           positions={pathCoordinates}
           pathOptions={{ 
             color: color, 
-            weight: 4, 
+            weight: 5, 
             opacity: 0.8,
-            dashArray: useOptimizedColor ? null : '8, 8' 
+            dashArray: useOptimizedColor ? null : '10, 10',
+            lineCap: 'round',
+            lineJoin: 'round'
           }}
         />
       );
@@ -60,27 +72,25 @@ const MapComponent = ({ nodes, routes, isOptimized }) => {
   };
 
   return (
-    <MapContainer center={defaultCenter} zoom={13} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={defaultCenter} zoom={13} style={{ height: '100%', width: '100%', background: '#0B0F19' }}>
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
       />
       <MapUpdater nodes={nodes} />
+      <ClickHandler onAddNode={onAddNode} />
       
-      {/* Draw nodes */}
       {nodes.map(node => (
         <Marker key={node.id} position={[node.lat, node.lng]}>
-          <Popup>
-            <strong>{node.label}</strong><br/>
-            ID: {node.id}
+          <Popup className="custom-popup">
+            <div className="font-semibold text-slate-800">{node.label}</div>
+            <div className="text-xs text-slate-500 font-mono mt-1">ID: {node.id}</div>
           </Popup>
         </Marker>
       ))}
 
-      {/* Draw Routes */}
       {routes && (
         <>
-          {/* If optimized, we draw green solid lines. If not, we draw the original clusters in red dashed lines. */}
           {isOptimized ? renderRoutes(routes.optimized, true) : renderRoutes(routes.unoptimized, false)}
         </>
       )}
